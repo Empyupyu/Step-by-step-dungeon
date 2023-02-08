@@ -6,6 +6,11 @@ public class CameraSystem : GameSystem
     {
         game.Camera = FindObjectOfType<CinemachineVirtualCamera>();
 
+        SetFollowTarget();
+    }
+
+    private void SetFollowTarget()
+    {
         game.Camera.Follow = game.Player.transform;
     }
 }
