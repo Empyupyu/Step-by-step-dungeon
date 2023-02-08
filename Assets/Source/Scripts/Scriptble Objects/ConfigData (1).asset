@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <StartLevelIndex>k__BackingField: 0
   <Player>k__BackingField: {fileID: 5169179790159817667, guid: 3720b1971c25ca74798c9a4d73033a0f, type: 3}
+  <Node>k__BackingField: {fileID: 6947452160796618507, guid: 5dd235edfa69aec4aa2c080ac027b298, type: 3}
+  <GridSize>k__BackingField: {x: 35, y: 50}
+  <OffsetNode>k__BackingField: {x: 1.8, y: 1.5}
