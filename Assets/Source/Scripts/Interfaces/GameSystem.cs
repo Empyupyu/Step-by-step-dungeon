@@ -13,7 +13,7 @@ public abstract class GameSystem : MonoBehaviour, IGameSystem
 
     public virtual void OnAwake() { }
 
-    public void OnStart() { }
+    public virtual void OnStart() { }
 
-    public void OnUpdate() { }
+    public virtual void OnUpdate() { }
 }

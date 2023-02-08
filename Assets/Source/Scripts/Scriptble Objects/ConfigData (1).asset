@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce9aa0d435bf94348985443221310768, type: 3}
   m_Name: ConfigData (1)
   m_EditorClassIdentifier: 
-  <Levels>k__BackingField: []
+  <StartLevelIndex>k__BackingField: 0
+  <Player>k__BackingField: {fileID: 5169179790159817667, guid: 3720b1971c25ca74798c9a4d73033a0f, type: 3}

@@ -4,6 +4,7 @@ public class SystemInitializer : MonoBehaviour
 {
     [SerializeField] private ConfigData config;
 
+    private GameData gameData = new GameData();
     private GameSystem[] systems;
 
     private void Awake()
@@ -19,7 +20,7 @@ public class SystemInitializer : MonoBehaviour
         {
             //Quick solution but better to use Zenject
 
-            systems[i].InitializeData(config, new GameData());
+            systems[i].InitializeData(config, gameData);
             systems[i].OnAwake();
         }
     }

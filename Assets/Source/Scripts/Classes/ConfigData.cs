@@ -4,4 +4,5 @@ using UnityEngine;
 public sealed class ConfigData : ScriptableObject
 {
       [field : SerializeField] public int StartLevelIndex { get; private set; }
+      [field : SerializeField] public Player Player { get; private set; }
 }
