@@ -8,6 +8,7 @@ public class GameData
     public Player Player;
     public CinemachineVirtualCamera Camera;
     public Node PlayerStayOnCurrentNode;
+    public Node SelectNode;
 
     public List<Unit> Units = new List<Unit>();
 

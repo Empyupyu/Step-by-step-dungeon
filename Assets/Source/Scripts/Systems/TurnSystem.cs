@@ -51,6 +51,7 @@ public class TurnSystem : GameSystem
             for (int i = 0; i < nodes.Length; i++)
             {
                 //reset last node
+                game.SelectNode = nodes[0].GetComponent<Node>();
                 game.PlayerStayOnCurrentNode.SetUnit(null);
                 game.PlayerStayOnCurrentNode = nodes[i].GetComponent<Node>();
 
