@@ -1,13 +1,13 @@
 using DG.Tweening;
 using Supyrb;
 using UnityEngine;
-using UnityEngine.Playables;
 
 public class PlayerMoveState : IState<PlayerStates>
 {
     private Unit player;
     private IMovable movable;
     private OnPlayerTurnIsCompletedSignal onPlayerTurnIsCompletedSignal;
+    private Vector3 movePoint;
 
     public PlayerMoveState(StateMachine<PlayerStates> stateMachine, PlayerStates type, Unit player, IMovable movable) : base(stateMachine, type)
     {
@@ -24,27 +24,49 @@ public class PlayerMoveState : IState<PlayerStates>
 
     private void Move()
     {
-        var moveDirection = movable.TargetNode.transform.position;
-        var movePoint = new Vector3(moveDirection.x, player.transform.position.y, moveDirection.z);
-
-        player.transform.DOLookAt(movePoint, .5f);
-
-        player.Animator.SetTrigger("Move");
+        UpdateMovePoint();
+        Animation();
 
         player.transform.DOMove(movePoint, 2.15f).OnComplete(() =>
         {
-            if (movable.TargetNode.Interactble != null)
-            {
-                movable.TargetNode.Interactble.Interact();
-            }
-            else
-            {
-                Signals.Get<InfoSignal>().Dispatch(player.Name + " Сделал шаг");
-            }
+            ActionOnEndMoving();
+            ChangeCurrentNode();
 
             stateMachine.SetState(PlayerStates.Idle);
             onPlayerTurnIsCompletedSignal.Dispatch();
         });
+    }
+
+    private void UpdateMovePoint()
+    {
+        var moveDirection = movable.TargetNode.transform.position;
+        movePoint = new Vector3(moveDirection.x, player.transform.position.y, moveDirection.z);
+    }
+
+    private void Animation()
+    {
+        player.transform.DOLookAt(movePoint, .5f);
+        player.Animator.SetTrigger("Move");
+    }
+
+    private void ActionOnEndMoving()
+    {
+        if (movable.TargetNode.Interactble != null)
+        {
+            movable.TargetNode.Interactble.Interact();
+        }
+        else
+        {
+            Signals.Get<InfoSignal>().Dispatch(player.Name + " Сделал шаг");
+        }
+    }
+
+    private void ChangeCurrentNode()
+    {
+        movable.CurrentNode.SetUnit(null);
+        movable.SetCurrentNode(movable.TargetNode);
+        movable.CurrentNode.SetUnit(player);
+        movable.SetTarget(null);
     }
 
     public override void OnExit()
@@ -52,8 +74,5 @@ public class PlayerMoveState : IState<PlayerStates>
         player.Animator.SetTrigger("Idle");
     }
 
-    public override void Tick()
-    {
-        
-    }
+    public override void Tick() { }
 }

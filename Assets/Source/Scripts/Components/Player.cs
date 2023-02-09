@@ -3,6 +3,7 @@ using Supyrb;
 public class Player : StateMachineObject<PlayerStates>, IMovable, IDamageble, IAttackable
 {
     public Node TargetNode { get; private set; }
+    public Node CurrentNode { get; private set; }
     public int Health { get; private set; }
     public int Damage { get; private set; }
 
@@ -19,6 +20,11 @@ public class Player : StateMachineObject<PlayerStates>, IMovable, IDamageble, IA
     public void SetTarget(Node node)
     {
         TargetNode = node;
+    }
+
+    public void SetCurrentNode(Node node)
+    {
+        CurrentNode = node;
     }
 
     public override void DoAction()

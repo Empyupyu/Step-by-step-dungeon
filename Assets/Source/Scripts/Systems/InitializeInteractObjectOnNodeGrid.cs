@@ -22,7 +22,7 @@ public class InitializeInteractObjectOnNodeGrid : GameSystem
     private void InitializePlayer()
     {
         game.NodeGrid[0, 0].SetUnit(game.Player);
-        game.PlayerStayOnCurrentNode = game.NodeGrid[0, 0];
+        game.Player.SetCurrentNode(game.NodeGrid[0, 0]);
     }
 
     private void InitializeEnemies()
@@ -38,7 +38,6 @@ public class InitializeInteractObjectOnNodeGrid : GameSystem
             SetNodePosition(enemy.transform, nodes[0].transform.position);
             nodes[0].GetComponent<Node>().SetUnit(enemy);
         }
-
     }
 
     private void InitializePortals()

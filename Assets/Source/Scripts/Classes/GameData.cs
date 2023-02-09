@@ -7,10 +7,9 @@ public class GameData
     public Level Level;
     public Player Player;
     public CinemachineVirtualCamera Camera;
-    public Node PlayerStayOnCurrentNode;
-    public Node SelectNode;
 
     public List<Unit> Units = new List<Unit>();
+    public List<Node> AvailableNodes = new List<Node>();
 
     public Node[,] NodeGrid;
 

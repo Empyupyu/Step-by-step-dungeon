@@ -3,7 +3,6 @@ using System.Linq;
 using DG.Tweening;
 using Supyrb;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class PlayerAttackState : IState<PlayerStates>
 {

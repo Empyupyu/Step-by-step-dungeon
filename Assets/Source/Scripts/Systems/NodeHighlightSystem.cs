@@ -1,13 +1,9 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using DG.Tweening;
 using Supyrb;
 using UnityEngine;
 
 public class NodeHighlightSystem : GameSystem
 {
-    private List<Node> nodes = new List<Node>();
-
     public override void OnAwake()
     {
         Signals.Get<NodeHighlightSignal>().AddListener(Highlighting);
@@ -24,18 +20,18 @@ public class NodeHighlightSystem : GameSystem
 
             if (node.Unit != null && node.Unit.Equals(game.Player)) continue; 
 
-            nodes.Add(node);
-            nodes[nodes.Count - 1].Material.DOColor(congfig.HightlightColor, "_Color",.5f);
+            game.AvailableNodes.Add(node);
+            game.AvailableNodes[game.AvailableNodes.Count - 1].Material.DOColor(congfig.HightlightColor, "_Color",.5f);
         }
     }
 
     private void DisableHigtlight()
     {
-        for (int i = 0; i < nodes.Count; i++)
+        for (int i = 0; i < game.AvailableNodes.Count; i++)
         {
-            nodes[i].Material.DOColor(congfig.DefaultColor, .5f);
+            game.AvailableNodes[i].Material.DOColor(congfig.DefaultColor, .5f);
         }
 
-        nodes.Clear();
+        game.AvailableNodes.Clear();
     }
 }

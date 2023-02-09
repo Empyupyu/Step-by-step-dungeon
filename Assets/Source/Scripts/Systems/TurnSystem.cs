@@ -1,11 +1,12 @@
 using System.Collections;
 using Supyrb;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class TurnSystem : GameSystem
 {
     private OnPlayerTurnIsCompletedSignal onPlayerTurnIsCompletedSignal;
+    private OnNodeSelectedSignal onNodeSelectedSignal;
+    private NodeHighlightSignal nodeHighlightSignal;
     private InfoSignal infoSignal;
 
     public override void OnAwake()
@@ -17,56 +18,28 @@ public class TurnSystem : GameSystem
     private void Subscribes()
     {
         onPlayerTurnIsCompletedSignal = Signals.Get<OnPlayerTurnIsCompletedSignal>();
+        onNodeSelectedSignal = Signals.Get<OnNodeSelectedSignal>();
+        nodeHighlightSignal = Signals.Get<NodeHighlightSignal>();
         infoSignal = Signals.Get<InfoSignal>();
+
+        onNodeSelectedSignal.AddListener(PlayerTurn);
         onPlayerTurnIsCompletedSignal.AddListener(UnitsTurn);
     }
 
     private IEnumerator DelayStart()
     {
         yield return new WaitForEndOfFrame();
+
         ChangeTurn();
     }
 
-    public override void OnUpdate()
+    private void PlayerTurn()
     {
-        PlayerDoAction();
-    }
+        game.Player.DoAction();
 
-    private void PlayerDoAction()
-    {
-        if (!game.IsPlayerTurn || !Input.GetMouseButtonDown(0) || EventSystem.current.IsPointerOverGameObject()) return;
+        ChangeTurn();
 
-        Plane plane = new Plane(Vector3.up, Vector3.zero);
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-        if (plane.Raycast(ray, out var enter))
-        {
-            game.MoveDirection = ray.GetPoint(enter);
-
-            var nodes = Physics.OverlapSphere(game.MoveDirection, .1f, game.NodeLayerMask);
-
-            if (nodes.Length == 0) return;
-
-            for (int i = 0; i < nodes.Length; i++)
-            {
-                //reset last node
-                game.SelectNode = nodes[0].GetComponent<Node>();
-                game.PlayerStayOnCurrentNode.SetUnit(null);
-                game.PlayerStayOnCurrentNode = nodes[i].GetComponent<Node>();
-
-                game.Player.SetTarget(game.PlayerStayOnCurrentNode);
-                break;
-            }
-
-            game.Player.DoAction();
-            
-            game.PlayerStayOnCurrentNode.SetUnit(game.Player);
-
-            ChangeTurn();
-
-            Signals.Get<DisableNodeHighlightSignal>().Dispatch();
-        }
+        Signals.Get<DisableNodeHighlightSignal>().Dispatch();
     }
 
     private void UnitsTurn()
@@ -91,6 +64,6 @@ public class TurnSystem : GameSystem
         ++game.RoundIndex;
 
         infoSignal.Dispatch("Round ¹" + game.RoundIndex);
-        Signals.Get<NodeHighlightSignal>().Dispatch(1f);
+        nodeHighlightSignal.Dispatch(1f);
     }
 }
