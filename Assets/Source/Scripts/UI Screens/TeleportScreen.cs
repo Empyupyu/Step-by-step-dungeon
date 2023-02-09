@@ -25,7 +25,7 @@ public class TeleportScreen : MonoBehaviour
         EnableWindow(true);
 
         selectedTeleport = teleport;
-        nextLevelText.text = "Level " + selectedTeleport.TransitionOnLevelIndex + 1;
+        nextLevelText.text = "Level " + (selectedTeleport.TransitionOnLevelIndex + 1).ToString();
     }
 
     private void OnTeleportButtonClick()
