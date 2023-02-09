@@ -2,13 +2,18 @@ using UnityEngine;
 
 public class NodeGridGenerationSystem : GameSystem
 {
-    [SerializeField] private int layer = 6;
+    private int gridLayer = 6;
+    private int nodeLayer = 7;
+
 
     private int layerAsLayerMask;
 
     public override void OnAwake()
     {
-        layerAsLayerMask = (1 << layer);
+        layerAsLayerMask = (1 << gridLayer);
+        game.NodeLayerMask = (1 << nodeLayer);
+
+        game.NodeGrid = new Node[(int)congfig.GridSize.y,(int)congfig.GridSize.x];
 
         Generation();
     }
@@ -21,9 +26,13 @@ public class NodeGridGenerationSystem : GameSystem
             {
                 var nextPositionNode = GetNextPosition(x, z);
 
-                if (!CheckIsAllowableForCherateNode(nextPositionNode)) continue;
+                if (!CheckIsAllowableForCherateNode(nextPositionNode))
+                {
+                    game.NodeGrid[z, x] = null;
+                    continue;
+                }
 
-                CreateNode(nextPositionNode);
+                game.NodeGrid[z, x] = CreateNode(nextPositionNode);
             }
         }
     }
@@ -42,11 +51,12 @@ public class NodeGridGenerationSystem : GameSystem
         return nextPosition;
     }
 
-    private void CreateNode(Vector3 nextPositionNode)
+    private Node CreateNode(Vector3 nextPositionNode)
     {
         var node = Instantiate(congfig.Node);
         node.transform.position = nextPositionNode;
         node.transform.parent = game.Level.PlayerStartPositionOnLevel;
+        return node;
     }
 
     private bool CheckIsAllowableForCherateNode(Vector3 nextPositionNode)

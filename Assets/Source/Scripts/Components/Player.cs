@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : Unit
 {
-    private Node targetNode;
+    public Node TargetNode { get; private set; }
     private OnPlayerTurnIsCompletedSignal onPlayerTurnIsCompletedSignal;
 
     private void Awake()
@@ -14,21 +14,25 @@ public class Player : Unit
 
     public void SetTargetNode(Node node)
     {
-        targetNode = node;
+        TargetNode = node;
     }
 
     public override void DoAction()
     {
-        if(targetNode.Unit == null)
+        if(TargetNode.Unit == null)
         {
             //move state
 
-            var moveDirection = targetNode.transform.position;
+            var moveDirection = TargetNode.transform.position;
             var movePoint = new Vector3(moveDirection.x, transform.position.y, moveDirection.z);
             transform.DOLookAt(movePoint, .5f);
-            transform.DOMove(movePoint, 1.5f).OnComplete(() => onPlayerTurnIsCompletedSignal.Dispatch());
+            transform.DOMove(movePoint, 1.5f).OnComplete(() => 
+            {
+                Signals.Get<InfoSignal>().Dispatch(Name + " Сделал шаг");
+                onPlayerTurnIsCompletedSignal.Dispatch();
+            });
         }
-        else  if(targetNode.Unit != null)
+        else  if(TargetNode.Unit != null)
         {
              //attack state
         }
