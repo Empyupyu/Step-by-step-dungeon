@@ -2,17 +2,11 @@ using DG.Tweening;
 using Supyrb;
 using UnityEngine;
 
-public class Player : Unit
+public class Player : StateMachineObject<PlayerStates>, IMovable
 {
     public Node TargetNode { get; private set; }
-    private OnPlayerTurnIsCompletedSignal onPlayerTurnIsCompletedSignal;
 
-    private void Awake()
-    {
-        onPlayerTurnIsCompletedSignal = Signals.Get<OnPlayerTurnIsCompletedSignal>();
-    }
-
-    public void SetTargetNode(Node node)
+    public void SetTarget(Node node)
     {
         TargetNode = node;
     }
@@ -21,26 +15,35 @@ public class Player : Unit
     {
         if(TargetNode.Unit == null)
         {
-            //move state
-
-            var moveDirection = TargetNode.transform.position;
-            var movePoint = new Vector3(moveDirection.x, transform.position.y, moveDirection.z);
-            transform.DOLookAt(movePoint, .5f);
-            transform.DOMove(movePoint, 1.5f).OnComplete(() => 
-            {
-                Signals.Get<InfoSignal>().Dispatch(Name + " Сделал шаг");
-                onPlayerTurnIsCompletedSignal.Dispatch();
-            });
+            StateMachine.SetState(PlayerStates.Move);
         }
         else  if(TargetNode.Unit != null)
         {
-             //attack state
-        }
-        else
-        {
-            //open chest
+            StateMachine.SetState(PlayerStates.Attack);
         }
 
         //onPlayerTurnIsCompletedSignal.Dispatch();
+    }
+
+    protected override void GetComponents()
+    {
+      
+    }
+
+    protected override void Init()
+    {
+       
+    }
+
+    protected override void SetInitialState()
+    {
+        StateMachine.SetState(PlayerStates.Idle);
+    }
+
+    protected override void LoadStates()
+    {
+        StateMachine.AddState(new PlayerIdleState(StateMachine, PlayerStates.Idle));
+        StateMachine.AddState(new PlayerMoveState(StateMachine, PlayerStates.Move, this, this));
+        StateMachine.AddState(new PlayerAttackState(StateMachine, PlayerStates.Attack, this));
     }
 }

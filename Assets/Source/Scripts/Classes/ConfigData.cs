@@ -10,4 +10,6 @@ public sealed class ConfigData : ScriptableObject
       [field : SerializeField] public Color DefaultColor { get; private set; }
       [field : SerializeField] public Vector2 GridSize { get; private set; }
       [field : SerializeField] public Vector2 OffsetNode { get; private set; }
+      [field : SerializeField] public bool IsDebug { get; private set; }
+
 }

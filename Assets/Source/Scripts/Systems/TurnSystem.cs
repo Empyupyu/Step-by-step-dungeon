@@ -54,7 +54,7 @@ public class TurnSystem : GameSystem
                 game.PlayerStayOnCurrentNode.SetUnit(null);
                 game.PlayerStayOnCurrentNode = nodes[i].GetComponent<Node>();
 
-                game.Player.SetTargetNode(game.PlayerStayOnCurrentNode);
+                game.Player.SetTarget(game.PlayerStayOnCurrentNode);
                 break;
             }
 
