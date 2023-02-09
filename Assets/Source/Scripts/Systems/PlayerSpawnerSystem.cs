@@ -20,5 +20,6 @@ public class PlayerSpawnerSystem : GameSystem
         game.Player.SetTimeToLookAt(congfig.TimeToLookAt);
         game.Player.SetHealth(congfig.HealthOnStart);
         game.Player.SetDamage(congfig.DamageOnStart);
+        game.Player.SetAvailableRadius(congfig.AvailableRadius);
     }
 }

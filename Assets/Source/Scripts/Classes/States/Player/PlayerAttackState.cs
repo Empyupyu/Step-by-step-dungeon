@@ -20,6 +20,11 @@ public class PlayerAttackState : IState<PlayerStates>
 
     public override void OnEnter()
     {
+        LookAtTarget();
+    }
+
+    private void LookAtTarget()
+    {
         var movePoint = new Vector3(player.TargetNode.Unit.transform.position.x, player.transform.position.y, player.TargetNode.Unit.transform.position.z);
 
         player.transform.DOLookAt(movePoint, .5f).OnComplete(() => player.StartCoroutine(DelayTransitionToOtherState()));

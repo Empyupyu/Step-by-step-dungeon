@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3166920708276574545}
   - component: {fileID: 5169179790159817667}
+  - component: {fileID: 3388064075670601810}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -46,6 +47,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Empyupyu
   <Animator>k__BackingField: {fileID: 998441579897727711}
+--- !u!136 &3388064075670601810
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2356661122052506627}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1001 &5872544609236375706
 PrefabInstance:
   m_ObjectHideFlags: 0

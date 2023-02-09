@@ -1,3 +1,5 @@
+using DG.Tweening;
+using Supyrb;
 using UnityEngine;
 
 public class SystemInitializer : MonoBehaviour
@@ -55,5 +57,8 @@ public class SystemInitializer : MonoBehaviour
     private void OnDestroy()
     {
         SaveUtill.Save(SavePlayerData, playerData);
+
+        Signals.Clear();
+        DOTween.KillAll();
     }
 }

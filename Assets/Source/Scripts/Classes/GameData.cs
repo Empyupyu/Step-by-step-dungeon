@@ -9,7 +9,6 @@ public class GameData
     public CinemachineVirtualCamera Camera;
 
     public List<Unit> Units = new List<Unit>();
-    public List<Node> AvailableNodes = new List<Node>();
 
     public Node[,] NodeGrid;
 

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Supyrb;
 
 public class Player : StateMachineObject<PlayerStates>, IMovable, IDamageble, IAttackable
@@ -8,6 +9,10 @@ public class Player : StateMachineObject<PlayerStates>, IMovable, IDamageble, IA
     public int Damage { get; private set; }
     public float MoveTimeToTargetNode { get; private set; }
     public float TimeToLookAt { get; private set; }
+    public float AvailableRadius { get; private set; }
+    public List<Node> AvailableNodes { get; private set; } = new List<Node>();
+
+    #region Setters
 
     public void SetHealth(int value)
     {
@@ -24,14 +29,14 @@ public class Player : StateMachineObject<PlayerStates>, IMovable, IDamageble, IA
         TimeToLookAt = time;
     }
 
+    public void SetAvailableRadius(float radius)
+    {
+        AvailableRadius = radius;
+    }
+
     public void SetDamage(int damage)
     {
         Damage = damage;
-    }
-
-    public void ApplyDamage(DamageInfoHolder damage)
-    {
-        Signals.Get<ApplyDamageSingal>().Dispatch(damage);
     }
 
     public void SetTarget(Node node)
@@ -42,6 +47,23 @@ public class Player : StateMachineObject<PlayerStates>, IMovable, IDamageble, IA
     public void SetCurrentNode(Node node)
     {
         CurrentNode = node;
+    }
+
+    public void SetAvailableNodes(List<Node> availableNodes)
+    {
+        AvailableNodes = availableNodes;
+    }
+
+    #endregion Setters
+
+    public void ApplyDamage(DamageInfoHolder damage)
+    {
+        Signals.Get<ApplyDamageSingal>().Dispatch(damage);
+    }
+
+    public void ClearAvailableNodes()
+    {
+        AvailableNodes.Clear();
     }
 
     public override void DoAction()
@@ -55,6 +77,8 @@ public class Player : StateMachineObject<PlayerStates>, IMovable, IDamageble, IA
             StateMachine.SetState(PlayerStates.Attack);
         }
     }
+
+    #region StateMachine
 
     protected override void GetComponents() { }
     protected override void Init() { }
@@ -70,4 +94,6 @@ public class Player : StateMachineObject<PlayerStates>, IMovable, IDamageble, IA
         StateMachine.AddState(new PlayerMoveState(StateMachine, PlayerStates.Move, this, this));
         StateMachine.AddState(new PlayerAttackState(StateMachine, PlayerStates.Attack, this, this));
     }
+
+    #endregion StateMachine
 }

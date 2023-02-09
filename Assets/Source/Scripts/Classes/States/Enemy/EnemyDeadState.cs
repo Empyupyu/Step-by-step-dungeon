@@ -1,11 +1,15 @@
 public class EnemyDeadState : IState<EnemiesStates>
 {
-    public EnemyDeadState(StateMachine<EnemiesStates> stateMachine, EnemiesStates type) : base(stateMachine, type)
+    private Enemy enemy;
+
+    public EnemyDeadState(StateMachine<EnemiesStates> stateMachine, EnemiesStates type, Enemy enemy) : base(stateMachine, type)
     {
+        this.enemy = enemy;
     }
 
     public override void OnEnter()
     {
+        enemy.Animator.SetTrigger("Death");
     }
 
     public override void OnExit()

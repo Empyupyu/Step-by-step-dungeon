@@ -5,6 +5,8 @@ public class InitializeInteractObjectOnNodeGrid : GameSystem
 {
     public override void OnStart()
     {
+        InitializePlayer();
+
         StartCoroutine(SetNearestNodeForEnemies());
     }
 
@@ -12,7 +14,6 @@ public class InitializeInteractObjectOnNodeGrid : GameSystem
     {
         yield return new WaitForEndOfFrame();
 
-        InitializePlayer();
         InitializeEnemies();
         InitializePortals();
     }
@@ -36,8 +37,11 @@ public class InitializeInteractObjectOnNodeGrid : GameSystem
 
             if (nodes.Length == 0) continue;
 
-            SetNodePosition(enemy.transform, nodes[0].transform.position);
-            nodes[0].GetComponent<Node>().SetUnit(enemy);
+            var node = nodes[0].GetComponent<Node>();
+
+            SetNodePosition(enemy.transform, node.transform.position);
+            enemy.SetCurrentNode(node);
+            node.SetUnit(enemy);
         }
     }
 

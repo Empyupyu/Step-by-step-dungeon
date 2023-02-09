@@ -59,6 +59,6 @@ public class SelectNodeSystem : GameSystem
 
     private bool AvailableNodes(Node selectNode)
     {
-        return game.AvailableNodes.Find(n => n.Equals(selectNode));
+        return game.Player.AvailableNodes.Find(n => n.Equals(selectNode));
     }
 }

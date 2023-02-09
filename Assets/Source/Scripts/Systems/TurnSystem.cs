@@ -13,6 +13,16 @@ public class TurnSystem : GameSystem
     {
         Subscribes();
         StartCoroutine(DelayStart());
+
+        InitializeEnemyUnits();
+    }
+
+    private void InitializeEnemyUnits()
+    {
+        for (int i = 0; i < game.Level.Enemy.Count; i++)
+        {
+            game.Units.Add(game.Level.Enemy[i]);
+        }
     }
 
     private void Subscribes()

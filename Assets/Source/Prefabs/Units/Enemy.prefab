@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 187667957816781278}
   - component: {fileID: 7908354599536130178}
+  - component: {fileID: 5819890781261871927}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -46,6 +47,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Name>k__BackingField: Skelet
   <Animator>k__BackingField: {fileID: 7054001925543747589}
+  <Health>k__BackingField: 0
+  <Damage>k__BackingField: 0
+  <AvailableRadius>k__BackingField: 1
+  <FindTargetUnitRadius>k__BackingField: 10
+--- !u!136 &5819890781261871927
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 414907844936093213}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &7054001925534356005
 GameObject:
   m_ObjectHideFlags: 0

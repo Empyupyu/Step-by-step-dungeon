@@ -6,14 +6,18 @@ public class Enemy : StateMachineObject<EnemiesStates>, IMovable, IDamageble, IA
 {
     [field : SerializeField] public int Health { get; private set; }
     [field : SerializeField] public int Damage { get; private set; }
+    [field : SerializeField] public float AvailableRadius { get; private set; }
+    [field : SerializeField] public float FindTargetUnitRadius { get; private set; }
     public Node TargetNode { get; private set; }
     public Node CurrentNode { get; private set; }
     public float MoveTimeToTargetNode { get; private set; }
     public float TimeToLookAt { get; private set; }
-    public float Radius { get; private set; }
+    public List<Node> AvailableNodes { get; private set; } = new List<Node>();
+    public Player TargetUnit { get; private set; }
 
-    private Player target;
     private List<Node> neighborNodes = new List<Node>();
+
+    #region Setters
 
     public void SetHealth(int value)
     {
@@ -30,6 +34,11 @@ public class Enemy : StateMachineObject<EnemiesStates>, IMovable, IDamageble, IA
         TimeToLookAt = time;
     }
 
+    public void SetAvailableRadius(float radius)
+    {
+        AvailableRadius = radius;
+    }
+
     public void SetDamage(int damage)
     {
         Damage = damage;
@@ -37,29 +46,50 @@ public class Enemy : StateMachineObject<EnemiesStates>, IMovable, IDamageble, IA
 
     public void SetRadius(float radius)
     {
-        Radius = radius;
-    }
-
-    public void FindTargetInRadius()
-    {
-        if (target != null) return;
-
-        var units = Physics.OverlapSphere(transform.position, Radius);
-
-        for (int i = 0; i < units.Length; i++)
-        {
-            if(units[i].TryGetComponent<Player>(out var player))
-            {
-                target = player;
-
-                return;
-            }
-        }
+        FindTargetUnitRadius = radius;
     }
 
     public void SetCurrentNode(Node node)
     {
         CurrentNode = node;
+    }
+
+    public void SetTarget(Node node)
+    {
+        TargetNode = node;
+    }
+
+    public void SetAvailableNodes(List<Node> availableNodes)
+    {
+        AvailableNodes = availableNodes;
+    }
+
+    #endregion Setters
+
+    public void FindTargeUnittInSphere()
+    {
+        if (TargetUnit != null) return;
+
+        var units = Physics.OverlapSphere(transform.position, FindTargetUnitRadius);
+
+        for (int i = 0; i < units.Length; i++)
+        {
+            if (units[i].TryGetComponent<Player>(out var player))
+            {
+                Ray ray = new Ray(transform.position + new Vector3(0, 0.5f, 0), player.transform.position + new Vector3(0, 0.5f, 0) - transform.position + new Vector3(0, 0.5f, 0));
+
+                Debug.DrawRay(transform.position + new Vector3(0,0.5f,0), player.transform.position + new Vector3(0, 0.5f, 0) - transform.position + new Vector3(0, 0.5f, 0), Color.red, 3);
+
+                if (Physics.Raycast(ray, out var hit))
+                {
+                    if (hit.collider.GetComponent<Player>() == null) return;
+                }
+
+                TargetUnit = player;
+
+                return;
+            }
+        }
     }
 
     public void ApplyDamage(DamageInfoHolder damage)
@@ -69,27 +99,60 @@ public class Enemy : StateMachineObject<EnemiesStates>, IMovable, IDamageble, IA
 
     public override void DoAction()
     {
-        FindTargetInRadius();
+        FindTargeUnittInSphere();
 
-        if(target != null )
+        if(TargetUnit != null)
         {
+            GetNeighborNodes();
 
+            var node = FindUnitTargetOnNeighborNodes();
+
+            if (node != null)
+            {
+                SetTarget(node);
+
+                StateMachine.SetState(EnemiesStates.Attack);
+            }
+            else
+            {
+                FindNearestNodeOnDirectionToTargetUnit();
+
+                StateMachine.SetState(EnemiesStates.Move);
+            }
         }
-
-
-        Debug.Log(nameof(Enemy) + " do somthing");
+        else
+        {
+            Debug.Log(nameof(Enemy) + " do somthing");
+        }
     }
 
     private void GetNeighborNodes()
     {
-       
-        
+        Signals.Get<FindNeighborNodesSignal>().Dispatch(this);
     }
 
-    public void SetTarget(Node node)
+    private Node FindUnitTargetOnNeighborNodes()
     {
-        TargetNode = node;
+        for (int i = 0; i < AvailableNodes.Count; i++)
+        {
+            if(AvailableNodes[i].Unit == TargetUnit)
+                return AvailableNodes[i];
+        }
+
+        return null;
     }
+
+    private void FindNearestNodeOnDirectionToTargetUnit()
+    {
+        Signals.Get<EnemyPathfindingSignal>().Dispatch(this);
+    }
+
+    public void ClearAvailableNodes()
+    {
+        AvailableNodes.Clear();
+    }
+
+    #region StateMachine
 
     protected override void GetComponents() { }
 
@@ -103,8 +166,10 @@ public class Enemy : StateMachineObject<EnemiesStates>, IMovable, IDamageble, IA
     protected override void LoadStates()
     {
         StateMachine.AddState(new EnemyIdleState(StateMachine, EnemiesStates.Idle));
-        StateMachine.AddState(new EnemyMoveState(StateMachine, EnemiesStates.Move));
-        StateMachine.AddState(new EnemyAttackState(StateMachine, EnemiesStates.Attack));
-        StateMachine.AddState(new EnemyDeadState(StateMachine, EnemiesStates.Death));
+        StateMachine.AddState(new EnemyMoveState(StateMachine, EnemiesStates.Move, this));
+        StateMachine.AddState(new EnemyAttackState(StateMachine, EnemiesStates.Attack, this));
+        StateMachine.AddState(new EnemyDeadState(StateMachine, EnemiesStates.Death, this));
     }
+
+    #endregion StateMachine
 }

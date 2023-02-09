@@ -18,10 +18,13 @@ MonoBehaviour:
   <MoveTimeToTargetNode>k__BackingField: 2
   <TimeToLookAt>k__BackingField: 0.5
   <HealthOnStart>k__BackingField: 956
-  <DamageOnStart>k__BackingField: 175
+  <DamageOnStart>k__BackingField: 164
+  <AvailableRadius>k__BackingField: 1
   <Node>k__BackingField: {fileID: 6947452160796618507, guid: 5dd235edfa69aec4aa2c080ac027b298, type: 3}
   <HightlightColor>k__BackingField: {r: 0.36822534, g: 0.8301887, b: 0.30074754, a: 1}
   <DefaultColor>k__BackingField: {r: 1, g: 1, b: 1, a: 0.23529412}
   <GridSize>k__BackingField: {x: 35, y: 50}
   <OffsetNode>k__BackingField: {x: 1.8, y: 1.5}
   <IsDebug>k__BackingField: 0
+  <HighlightingDuration>k__BackingField: 0.65
+  <DefaultColorDuration>k__BackingField: 0.5
