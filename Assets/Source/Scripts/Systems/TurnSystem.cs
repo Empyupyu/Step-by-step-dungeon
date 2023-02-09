@@ -49,6 +49,13 @@ public class TurnSystem : GameSystem
             game.Units[i].DoAction();
         }
 
+        StartCoroutine(DelayBeforeEndTurn());
+    }
+
+    private IEnumerator DelayBeforeEndTurn()
+    {
+        yield return new WaitForSeconds(congfig.DelayTransitionToPlayerTurn);
+
         ChangeTurn();
     }
 

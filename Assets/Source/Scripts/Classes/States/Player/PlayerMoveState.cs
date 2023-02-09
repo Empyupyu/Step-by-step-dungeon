@@ -27,7 +27,7 @@ public class PlayerMoveState : IState<PlayerStates>
         UpdateMovePoint();
         Animation();
 
-        player.transform.DOMove(movePoint, 2.15f).OnComplete(() =>
+        player.transform.DOMove(movePoint, movable.MoveTimeToTargetNode).OnComplete(() =>
         {
             ActionOnEndMoving();
             ChangeCurrentNode();
@@ -45,7 +45,7 @@ public class PlayerMoveState : IState<PlayerStates>
 
     private void Animation()
     {
-        player.transform.DOLookAt(movePoint, .5f);
+        player.transform.DOLookAt(movePoint, movable.TimeToLookAt);
         player.Animator.SetTrigger("Move");
     }
 

@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class InitializeInteractObjectOnNodeGrid : GameSystem
@@ -30,6 +28,9 @@ public class InitializeInteractObjectOnNodeGrid : GameSystem
         for (int i = 0; i < game.Level.Enemy.Count; i++)
         {
             var enemy = game.Level.Enemy[i];
+
+            enemy.SetMoveTimeToTargetNode(congfig.MoveTimeToTargetNode);
+            enemy.SetTimeToLookAt(congfig.TimeToLookAt);
 
             var nodes = FindNearestNodes(enemy.transform.position, .5f);
 

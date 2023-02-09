@@ -6,10 +6,27 @@ public class Player : StateMachineObject<PlayerStates>, IMovable, IDamageble, IA
     public Node CurrentNode { get; private set; }
     public int Health { get; private set; }
     public int Damage { get; private set; }
+    public float MoveTimeToTargetNode { get; private set; }
+    public float TimeToLookAt { get; private set; }
 
     public void SetHealth(int value)
     {
         Health = value;
+    }
+
+    public void SetMoveTimeToTargetNode(float time)
+    {
+        MoveTimeToTargetNode = time;
+    }
+
+    public void SetTimeToLookAt(float time)
+    {
+        TimeToLookAt = time;
+    }
+
+    public void SetDamage(int damage)
+    {
+        Damage = damage;
     }
 
     public void ApplyDamage(DamageInfoHolder damage)
