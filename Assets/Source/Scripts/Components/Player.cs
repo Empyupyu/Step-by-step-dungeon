@@ -11,12 +11,22 @@ public class Player : StateMachineObject<PlayerStates>, IMovable, IDamageble, IA
     public float TimeToLookAt { get; private set; }
     public float AvailableRadius { get; private set; }
     public List<Node> AvailableNodes { get; private set; } = new List<Node>();
+    public bool IsDeath { get; private set; }
 
     #region Setters
 
     public void SetHealth(int value)
     {
         Health = value;
+
+        if(Health == 0)
+        {
+            IsDeath = true;
+
+            Signals.Get<OnPlayerDeathSignal>().Dispatch();
+
+            StateMachine.SetState(PlayerStates.Death);
+        }
     }
 
     public void SetMoveTimeToTargetNode(float time)
@@ -93,6 +103,7 @@ public class Player : StateMachineObject<PlayerStates>, IMovable, IDamageble, IA
         StateMachine.AddState(new PlayerIdleState(StateMachine, PlayerStates.Idle));
         StateMachine.AddState(new PlayerMoveState(StateMachine, PlayerStates.Move, this, this));
         StateMachine.AddState(new PlayerAttackState(StateMachine, PlayerStates.Attack, this, this));
+        StateMachine.AddState(new PlayerDeathState(StateMachine, PlayerStates.Death, this));
     }
 
     #endregion StateMachine

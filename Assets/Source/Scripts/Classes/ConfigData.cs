@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ConfigData (1)", menuName = "Datas/Config")]
@@ -17,7 +18,9 @@ public sealed class ConfigData : ScriptableObject
       [field : SerializeField] public Color DefaultColor { get; private set; }
       [field : SerializeField] public Vector2 GridSize { get; private set; }
       [field : SerializeField] public Vector2 OffsetNode { get; private set; }
-      [field : SerializeField] public bool IsDebug { get; private set; }
       [field : SerializeField] public float HighlightingDuration { get; private set; }
       [field : SerializeField] public float DefaultColorDuration { get; private set; }
+      [field : SerializeField, Header("Level Settings")] public List<ChestData> ChestDatas { get; private set; }
+      [field : SerializeField, Header("Debug Settings")] public bool IsDebug { get; private set; }
+      [field : SerializeField] public int EnemyHealthOnDebugMode { get; private set; }
 }

@@ -10,13 +10,16 @@ public class EnemyDeadState : IState<EnemiesStates>
     public override void OnEnter()
     {
         enemy.Animator.SetTrigger("Death");
+
+        ClearNode();
     }
 
-    public override void OnExit()
+    private void ClearNode()
     {
+        enemy.CurrentNode.SetUnit(null);
+        enemy.SetCurrentNode(null);
     }
 
-    public override void Tick()
-    {
-    }
+    public override void OnExit() { }
+    public override void Tick() { }
 }

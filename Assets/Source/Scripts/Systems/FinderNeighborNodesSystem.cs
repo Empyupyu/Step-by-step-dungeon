@@ -19,7 +19,13 @@ public class FinderNeighborNodesSystem : GameSystem
         {
             var node = nearestNodes[i].GetComponent<Node>();
 
-            if (node.Unit != null && node.Unit.Equals(movable)) continue;
+            if (node.Unit != null)
+            {
+                if (node.Unit.Equals(movable))
+                {
+                    continue;
+                }
+            }
 
             availableNodes.Add(node);
         }

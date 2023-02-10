@@ -14,6 +14,7 @@ public class Enemy : StateMachineObject<EnemiesStates>, IMovable, IDamageble, IA
     public float TimeToLookAt { get; private set; }
     public List<Node> AvailableNodes { get; private set; } = new List<Node>();
     public Player TargetUnit { get; private set; }
+    public bool IsDeath { get; private set; }
 
     private List<Node> neighborNodes = new List<Node>();
 
@@ -22,6 +23,15 @@ public class Enemy : StateMachineObject<EnemiesStates>, IMovable, IDamageble, IA
     public void SetHealth(int value)
     {
         Health = value;
+
+        if(Health == 0 && !IsDeath)
+        {
+            IsDeath = true;
+
+            Signals.Get<OnUnitDeathSignal>().Dispatch(this);
+
+            StateMachine.SetState(EnemiesStates.Death);
+        }
     }
 
     public void SetMoveTimeToTargetNode(float time)

@@ -15,6 +15,7 @@ public class GameData
     public Vector3 MoveDirection;
 
     public bool IsPlayerTurn;
+    public bool GameIsOver;
 
     public int RoundIndex;
     public int NodeLayerMask;

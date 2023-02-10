@@ -16,6 +16,7 @@ public class InitializeInteractObjectOnNodeGrid : GameSystem
 
         InitializeEnemies();
         InitializePortals();
+        InitializeChest();
     }
 
     private void InitializePlayer()
@@ -26,9 +27,9 @@ public class InitializeInteractObjectOnNodeGrid : GameSystem
 
     private void InitializeEnemies()
     {
-        for (int i = 0; i < game.Level.Enemy.Count; i++)
+        for (int i = 0; i < game.Level.Enemies.Count; i++)
         {
-            var enemy = game.Level.Enemy[i];
+            var enemy = game.Level.Enemies[i];
 
             enemy.SetMoveTimeToTargetNode(congfig.MoveTimeToTargetNode);
             enemy.SetTimeToLookAt(congfig.TimeToLookAt);
@@ -56,6 +57,20 @@ public class InitializeInteractObjectOnNodeGrid : GameSystem
 
             SetNodePosition(portal.transform, nodes[0].transform.position);
             nodes[0].GetComponent<Node>().SetInteractlbe(portal);
+        }
+    }
+
+    private void InitializeChest()
+    {
+        for (int i = 0; i < game.Level.Chests.Count; i++)
+        {
+            var chest = game.Level.Chests[i];
+            var nodes = FindNearestNodes(chest.transform.position, .5f);
+
+            if (nodes.Length == 0) continue;
+
+            SetNodePosition(chest.transform, nodes[0].transform.position);
+            nodes[0].GetComponent<Node>().SetInteractlbe(chest);
         }
     }
 

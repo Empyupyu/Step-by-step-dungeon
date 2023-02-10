@@ -1,18 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
+using Supyrb;
 using UnityEngine;
 
-public class Chest : MonoBehaviour
+public class Chest : MonoBehaviour, IInteractble
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private Animator animator;
+
+    public ChestData ChestData { get; private set; }
+
+    public void SetData(ChestData chestData)
     {
-        
+        ChestData = chestData;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Interact()
     {
-        
+        animator.Play("Open");
+        Signals.Get<OpenChestSignal>().Dispatch(this);
     }
 }

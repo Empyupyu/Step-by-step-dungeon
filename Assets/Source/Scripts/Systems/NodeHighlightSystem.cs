@@ -1,5 +1,7 @@
+using System.Collections;
 using DG.Tweening;
 using Supyrb;
+using UnityEngine;
 
 public class NodeHighlightSystem : GameSystem
 {
@@ -18,7 +20,9 @@ public class NodeHighlightSystem : GameSystem
 
     private void DisableHigtlight()
     {
-        game.Player.AvailableNodes.ForEach(n => n.Material.DOColor(congfig.DefaultColor, congfig.DefaultColorDuration));
+        game.Player.AvailableNodes.ForEach(n => n.Material.DOColor(congfig.DefaultColor, "_Color", congfig.DefaultColorDuration));
         game.Player.ClearAvailableNodes();
+
+        Signals.Get<PlayerCanMovmentSignal>().Dispatch();
     }
 }

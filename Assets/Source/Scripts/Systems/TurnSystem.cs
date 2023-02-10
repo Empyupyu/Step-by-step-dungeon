@@ -13,16 +13,6 @@ public class TurnSystem : GameSystem
     {
         Subscribes();
         StartCoroutine(DelayStart());
-
-        InitializeEnemyUnits();
-    }
-
-    private void InitializeEnemyUnits()
-    {
-        for (int i = 0; i < game.Level.Enemy.Count; i++)
-        {
-            game.Units.Add(game.Level.Enemy[i]);
-        }
     }
 
     private void Subscribes()
@@ -32,7 +22,9 @@ public class TurnSystem : GameSystem
         nodeHighlightSignal = Signals.Get<NodeHighlightSignal>();
         infoSignal = Signals.Get<InfoSignal>();
 
-        onNodeSelectedSignal.AddListener(PlayerTurn);
+        Signals.Get<PlayerCanMovmentSignal>().AddListener(PlayerDoAction);
+
+        onNodeSelectedSignal.AddListener(PlayerTurnActivating);
         onPlayerTurnIsCompletedSignal.AddListener(UnitsTurn);
     }
 
@@ -43,13 +35,16 @@ public class TurnSystem : GameSystem
         ChangeTurn();
     }
 
-    private void PlayerTurn()
+    private void PlayerTurnActivating()
+    {
+        Signals.Get<DisableNodeHighlightSignal>().Dispatch();
+    }
+
+    private void PlayerDoAction()
     {
         game.Player.DoAction();
 
         ChangeTurn();
-
-        Signals.Get<DisableNodeHighlightSignal>().Dispatch();
     }
 
     private void UnitsTurn()
@@ -78,9 +73,28 @@ public class TurnSystem : GameSystem
 
     private void NextRaund()
     {
+        if (game.GameIsOver)
+        {
+            GameOverInfo();
+
+            return;
+        }
+
         ++game.RoundIndex;
 
-        infoSignal.Dispatch("Round №" + game.RoundIndex);
+        infoSignal.Dispatch("Раунд №" + game.RoundIndex);
         nodeHighlightSignal.Dispatch(1f);
+    }
+
+    private void GameOverInfo()
+    {
+        var gameOverText = game.Player.Name + " победил одолев всех врагов в Раунде №" + game.RoundIndex;
+
+        if (game.Player.IsDeath)
+        {
+            gameOverText = game.Player.Name + " побиг в Раунде №" + game.RoundIndex;
+        }
+
+        infoSignal.Dispatch(gameOverText);
     }
 }

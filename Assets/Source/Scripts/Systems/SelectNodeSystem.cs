@@ -26,7 +26,7 @@ public class SelectNodeSystem : GameSystem
 
     private bool CanTrySelecting()
     {
-        return game.IsPlayerTurn && Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject();
+        return !game.GameIsOver && game.IsPlayerTurn && Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject();
     }
 
     private void CreateRaycast()
